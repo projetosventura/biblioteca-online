@@ -39,7 +39,9 @@ const TableBody = ({ livros = [], removeLivro }) => {
             <td>{livro.id}</td>
             <td>{livro.nome}</td>
             <td>{livro.autor}</td>
-            <td>{livro.dataLancamento}</td>
+            <td>
+              {livro.dataLancamento ? new Date(livro.dataLancamento).toLocaleDateString('pt-BR') : 'Data não disponível'}
+            </td>
             <td>{livro.numeroEdicao}</td>
             <td>{livro.localLancamento}</td>
             <td>{livro.codigoBarras}</td>
@@ -57,5 +59,6 @@ const TableBody = ({ livros = [], removeLivro }) => {
     </tbody>
   );
 };
+
 
 export default Tabela;
