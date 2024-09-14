@@ -3,9 +3,9 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');  // Importando o CORS middleware
 const app = express();
-const bookRoutes = require('./routes/bookRoutes');
+const bookRoutes = require('./routes/book-Routes');
 
-// Configuração das opções do Swagger
+
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',  // Especificando a versão do OpenAPI
@@ -16,15 +16,15 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'http://localhost:3000',  // Servidor onde a API está rodando
+                url: 'http://localhost:3000',  
             },
         ],
     },
-    apis: ['./routes/*.js'],  // Caminho para os arquivos que contêm as rotas e definições de Swagger
+    apis: ['./routes/*.js'],  
 };
 
 // Inicializando o middleware CORS
-app.use(cors());  // Isso permite requisições cross-origin
+app.use(cors());  
 
 // Configuração do Swagger
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

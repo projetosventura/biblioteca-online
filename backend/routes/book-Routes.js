@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bookModel = require('../models/bookModel');
+const bookModel = require('../models/book-Model');
 
 /**
  * @swagger
