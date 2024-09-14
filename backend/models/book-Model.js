@@ -120,13 +120,18 @@ async function removerLivro(id) {
     const sql = 'DELETE FROM livros WHERE id = :id';
     const binds = { id };
     const result = await conn.execute(sql, binds, { autoCommit: true });
-    
+
     if (result.rowsAffected === 0) {
-      throw new Error('Livro não encontrado');
+      // Livro não encontrado, retorna 404
+      return { status: 404, message: 'Livro não encontrado' };
     }
+    
+    // Livro removido com sucesso, retorna 200
+    return { status: 200, message: 'Livro removido com sucesso' };
   } catch (err) {
     console.error('Erro ao remover livro:', err);
-    throw err;
+    // Erro no servidor, retorna 500
+    return { status: 500, message: 'Erro ao remover livro' };
   } finally {
     if (conn) {
       try {
