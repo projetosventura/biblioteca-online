@@ -1,42 +1,56 @@
-.App {
-  text-align: center;
+/* Reset básico */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Fonte para código */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Estilo para o formulário */
+.input-field {
+  margin-bottom: 2rem; /* Espaçamento inferior entre os campos */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.input-field label {
+  top: -1.5rem; /* Ajuste a posição do rótulo para cima */
+  left: 0; /* Alinhe o rótulo à esquerda do campo */
+  position: absolute; /* Para garantir o posicionamento absoluto */
+  transform: translateY(-50%); /* Ajusta o alinhamento vertical */
 }
 
-.App-link {
-  color: #61dafb;
+.input-field input[type="date"] {
+  margin-top: 0; /* Remova o espaço superior se necessário */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Outras estilizações se necessário */
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  border-radius: 4px; /* Borda arredondada para os campos */
+  padding: 0.5rem; /* Espaçamento interno dos campos */
+  border: 1px solid #ccc; /* Borda padrão dos campos */
+  width: 100%; /* Ocupa toda a largura do contêiner */
 }
 
-.mb-10{
-  margin-bottom: 1em;
+button {
+  margin-top: 1rem; /* Espaçamento superior para o botão */
+  padding: 0.5rem 1rem; /* Espaçamento interno do botão */
+  border: none; /* Remove bordas padrão do botão */
+  border-radius: 4px; /* Borda arredondada para o botão */
+  background-color: #007bff; /* Cor de fundo do botão */
+  color: white; /* Cor do texto do botão */
+  cursor: pointer; /* Cursor de ponteiro para o botão */
+}
+
+button:disabled {
+  background-color: #ccc; /* Cor de fundo quando desativado */
+  cursor: not-allowed; /* Cursor quando desativado */
 }

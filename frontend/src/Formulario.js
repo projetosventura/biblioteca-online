@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import './App.css'; // Certifique-se de que o CSS está importado
 
 class Formulario extends Component {
   constructor(props) {
     super(props);
-    
     this.state = {
       nome: '',
       autor: '',
