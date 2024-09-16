@@ -4,13 +4,13 @@ const oracledb = require('oracledb');
 async function connect() {
   try {
     return await oracledb.getConnection({
-      user: 'SYSTEM',          // Substitua pelo seu usuário de banco de dados
-      password: 'teste@123',   // Substitua pela sua senha de banco de dados
-      connectString: 'localhost:1521/xe'  // Substitua pelo seu connect string
+      user: 'SYSTEM',
+      password: 'teste@123',
+      connectString: 'localhost:1521/xe'
     });
   } catch (err) {
     console.error('Erro ao conectar ao banco de dados:', err);
-    throw err;  // Propaga o erro para ser tratado pelo chamador
+    throw err;
   }
 }
 
@@ -26,10 +26,11 @@ async function livroExiste(nome, autor) {
     `;
     const binds = { nome, autor };
     const result = await conn.execute(sql, binds);
-    return result.rows[0][0] > 0;  // Retorna verdadeiro se o livro já existir
+    console.log('Resultado da verificação de existência:', result.rows[0][0]);
+    return result.rows[0][0] > 0;
   } catch (err) {
     console.error('Erro ao verificar se o livro existe:', err);
-    throw err;
+    throw new Error('Erro ao verificar se o livro existe');
   } finally {
     if (conn) {
       try {
@@ -49,12 +50,11 @@ async function listarLivros() {
     const result = await conn.execute(
       'SELECT id, nome, autor, data_lancamento, numero_edicao, local_lancamento, codigo_barras FROM livros'
     );
-    // Mapear os resultados para um formato mais legível
     return result.rows.map(row => ({
-      id: row[0],  // Inclua o ID para operações de remoção e atualização
+      id: row[0],
       nome: row[1],
       autor: row[2],
-      dataLancamento: row[3],  // Certifique-se de que o formato da data está correto
+      dataLancamento: row[3].toISOString().split('T')[0],
       numeroEdicao: row[4],
       localLancamento: row[5],
       codigoBarras: row[6]
@@ -73,16 +73,17 @@ async function listarLivros() {
   }
 }
 
-// Função para adicionar um novo livro
 async function adicionarLivro(livro) {
   let conn;
   try {
+    console.log('Tentando adicionar livro:', livro);
     conn = await connect();
-    
-    // Verificar se o livro já existe
+
+    // Verifique se o livro já existe antes de adicionar
     const existe = await livroExiste(livro.nome, livro.autor);
     if (existe) {
-      throw new Error('Livro já existe no banco de dados');
+      console.log('Livro já existe:', livro);
+      return { status: 400, message: 'Livro já existe' };
     }
 
     const sql = `
@@ -98,6 +99,9 @@ async function adicionarLivro(livro) {
       codigo_barras: livro.codigoBarras
     };
     await conn.execute(sql, binds, { autoCommit: true });
+
+    console.log('Livro adicionado com sucesso:', livro);
+    return { status: 200, message: 'Livro adicionado com sucesso' };
   } catch (err) {
     console.error('Erro ao adicionar livro:', err);
     throw err;
@@ -122,15 +126,12 @@ async function removerLivro(id) {
     const result = await conn.execute(sql, binds, { autoCommit: true });
 
     if (result.rowsAffected === 0) {
-      // Livro não encontrado, retorna 404
       return { status: 404, message: 'Livro não encontrado' };
     }
     
-    // Livro removido com sucesso, retorna 200
     return { status: 200, message: 'Livro removido com sucesso' };
   } catch (err) {
     console.error('Erro ao remover livro:', err);
-    // Erro no servidor, retorna 500
     return { status: 500, message: 'Erro ao remover livro' };
   } finally {
     if (conn) {
@@ -143,7 +144,7 @@ async function removerLivro(id) {
   }
 }
 
-// Função para atualizar um livro (opcional)
+// Função para atualizar um livro
 async function atualizarLivro(id, livroAtualizado) {
   let conn;
   try {
@@ -167,6 +168,7 @@ async function atualizarLivro(id, livroAtualizado) {
     if (result.rowsAffected === 0) {
       throw new Error('Livro não encontrado');
     }
+    console.log('Livro atualizado com sucesso:', livroAtualizado);
   } catch (err) {
     console.error('Erro ao atualizar livro:', err);
     throw err;

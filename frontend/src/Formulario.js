@@ -23,22 +23,26 @@ class Formulario extends Component {
   };
 
   submitFormulario = async () => {
-    if (this.state.isSubmitting) return; // Impede múltiplos envios
-
-    this.setState({ isSubmitting: true }); // Marca como enviando
-    console.log('submitFormulario chamado');
-    
-    const { nome, autor, dataLancamento, numeroEdicao, localLancamento, codigoBarras } = this.state;
-
-    if (!nome || !autor || !dataLancamento) {
-      console.error('Por favor, preencha todos os campos obrigatórios.');
-      this.setState({ isSubmitting: false }); // Marca como não enviando
+    if (this.state.isSubmitting) {
+      console.log('Envio em progresso, ignorando');
       return;
     }
-
+  
+    this.setState({ isSubmitting: true }); // Marca como enviando
+    console.log('submitFormulario chamado');
+  
+    const { nome, autor, dataLancamento, numeroEdicao, localLancamento, codigoBarras } = this.state;
+  
+    if (!nome || !autor || !dataLancamento) {
+      console.error('Por favor, preencha todos os campos obrigatórios.');
+      this.setState({ isSubmitting: false });
+      return;
+    }
+  
     const livroData = { nome, autor, dataLancamento, numeroEdicao, localLancamento, codigoBarras };
-
+  
     try {
+      console.log('Enviando dados:', livroData);
       const response = await fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: {
@@ -46,7 +50,7 @@ class Formulario extends Component {
         },
         body: JSON.stringify(livroData),
       });
-
+  
       if (response.ok) {
         console.log('Livro adicionado com sucesso');
         this.props.escutadorDeSubmit(livroData);
@@ -57,17 +61,18 @@ class Formulario extends Component {
           numeroEdicao: '',
           localLancamento: '',
           codigoBarras: '',
-          isSubmitting: false // Marca como não enviando
+          isSubmitting: false
         });
       } else {
         console.error('Erro ao salvar livro:', response.statusText);
-        this.setState({ isSubmitting: false }); // Marca como não enviando
+        this.setState({ isSubmitting: false });
       }
     } catch (error) {
       console.error('Erro ao enviar requisição:', error);
-      this.setState({ isSubmitting: false }); // Marca como não enviando
+      this.setState({ isSubmitting: false });
     }
   };
+  
 
   render() {
     const { nome, autor, dataLancamento, numeroEdicao, localLancamento, codigoBarras } = this.state;
