@@ -3,7 +3,9 @@ version: '3.8'
 services:
   oracle-db:
     container_name: oracle-db
-    image: gvenzl/oracle-xe
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "1521:1521"
       - "5500:5500"
